@@ -128,6 +128,53 @@ Risk: LOW / WATCH / ELEVATED / HIGH / CRITICAL
 Score: XX/100
 
 Risk: LOW / WATCH / ELEVATED / HIGH / CRITICAL
+## Score Transparency Requirement
+
+SqueezeGuard must show the actual point allocation for every scoring category.
+
+For SHORT SQUEEZE RISK, always show:
+
+### SHORT SQUEEZE SCORE BREAKDOWN
+
+Price Momentum: X/15
+Open Interest: X/20
+Funding / Positioning: X/15
+Long / Short Crowding: X/15
+Taker Flow: X/15
+Order Book: X/10
+Market Structure: X/10
+
+TOTAL: XX/100
+
+For LONG SQUEEZE RISK, always show:
+
+### LONG SQUEEZE SCORE BREAKDOWN
+
+Price Momentum: X/15
+Open Interest: X/20
+Funding / Positioning: X/15
+Long / Short Crowding: X/15
+Taker Flow: X/15
+Order Book: X/10
+Market Structure: X/10
+
+TOTAL: XX/100
+
+The category points MUST add exactly to the final score.
+
+Every category must include a short explanation showing which Binance market data justified the assigned points.
+
+Never assign points without supporting evidence.
+
+If important data for a category is unavailable, explicitly state the limitation and reduce confidence in that category rather than inventing data.
+
+## Data Freshness
+
+Always display the market-data timestamp.
+
+When multiple Binance data sources have different timestamps, use the newest available snapshot while clearly noting the analysis window.
+
+Never present historical data as current market data.
 
 ## MARKET SNAPSHOT
 
