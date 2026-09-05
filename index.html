@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>SqueezeGuard AI</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background:
+    radial-gradient(circle at top, #172554 0%, #07111f 40%, #020617 100%);
+  color: #f8fafc;
+  min-height: 100vh;
+}
+
+.container {
+  width: 92%;
+  max-width: 1050px;
+  margin: auto;
+  padding: 35px 0 60px;
+}
+
+.hero {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.logo {
+  font-size: 54px;
+  margin-bottom: 8px;
+}
+
+.hero h1 {
+  font-size: clamp(34px, 8vw, 60px);
+  letter-spacing: -2px;
+}
+
+.hero h1 span {
+  color: #facc15;
+}
+
+.tagline {
+  margin-top: 10px;
+  color: #94a3b8;
+  font-size: 16px;
+}
+
+.powered {
+  display: inline-block;
+  margin-top: 15px;
+  padding: 7px 13px;
+  border-radius: 999px;
+  background: rgba(250,204,21,.08);
+  border: 1px solid rgba(250,204,21,.35);
+  color: #facc15;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.card {
+  background: rgba(15,23,42,.82);
+  border: 1px solid rgba(148,163,184,.18);
+  border-radius: 20px;
+  padding: 20px;
+  margin-bottom: 18px;
+  box-shadow: 0 15px 40px rgba(0,0,0,.25);
+}
+
+.input-label {
+  font-size: 12px;
+  color: #94a3b8;
+  margin-bottom: 8px;
+  display: block;
+  font-weight: bold;
+}
+
+.search-row {
+  display: flex;
+  gap: 10px;
+}
+
+input {
+  flex: 1;
+  padding: 15px;
+  border-radius: 12px;
+  border: 1px solid #334155;
+  background: #020617;
+  color: white;
+  font-size: 16px;
+  outline: none;
+  text-transform: uppercase;
+}
+
+button {
+  border: 0;
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.run-btn {
+  background: #facc15;
+  color: #111827;
+}
+
+.copy-btn {
+  width: 100%;
+  margin-top: 10px;
+  background: #1e293b;
+  color: white;
+  border: 1px solid #334155;
+}
+
+.demo-note {
+  color: #94a3b8;
+  font-size: 12px;
+  margin-top: 12px;
+  line-height: 1.5;
+}
+
+.status {
+  display: none;
+  margin-top: 15px;
+  font-size: 13px;
+  color: #22c55e;
+}
+
+.section-title {
+  color: #94a3b8;
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  margin-bottom: 15px;
+}
+
+.score-grid {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 15px;
+}
+
+.score-card {
+  padding: 20px;
+  border-radius: 17px;
+  background: #020617;
+  border: 1px solid #1e293b;
+}
+
+.score-title {
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+.score-number {
+  font-size: 42px;
+  font-weight: 800;
+  margin: 8px 0 3px;
+}
+
+.risk {
+  display: inline-block;
+  padding: 5px 9px;
+  border-radius: 7px;
+  background: rgba(250,204,21,.12);
+  color: #facc15;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.progress {
+  margin-top: 15px;
+  height: 7px;
+  background: #1e293b;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.progress div {
+  height: 100%;
+  background: #facc15;
+  width: 0%;
+  transition: width .8s ease;
+}
+
+.snapshot-grid {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 12px;
+}
+
+.metric {
+  padding: 15px;
+  background: #020617;
+  border: 1px solid #1e293b;
+  border-radius: 13px;
+}
+
+.metric-name {
+  color: #64748b;
+  font-size: 11px;
+  margin-bottom: 6px;
+}
+
+.metric-value {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.breakdown-row {
+  display: grid;
+  grid-template-columns: 1fr 70px;
+  margin: 9px 0;
+  padding-bottom: 9px;
+  border-bottom: 1px solid #172033;
+}
+
+.breakdown-row:last-child {
+  border-bottom: none;
+}
+
+.points {
+  text-align: right;
+  color: #facc15;
+  font-weight: bold;
+}
+
+.evidence {
+  line-height: 1.8;
+  color: #cbd5e1;
+  padding-left: 20px;
+}
+
+.verdict {
+  text-align: center;
+  border: 1px solid rgba(250,204,21,.35);
+  background:
+    linear-gradient(135deg,
+    rgba(250,204,21,.08),
+    rgba(15,23,42,.8));
+}
+
+.verdict-icon {
+  font-size: 40px;
+}
+
+.verdict h2 {
+  margin: 10px 0;
+  color: #facc15;
+}
+
+.verdict p {
+  color: #cbd5e1;
+  line-height: 1.6;
+}
+
+.hidden {
+  display: none;
+}
+
+.footer {
+  text-align: center;
+  color: #475569;
+  font-size: 11px;
+  margin-top: 25px;
+  line-height: 1.7;
+}
+
+@media(max-width:700px) {
+  .score-grid,
+  .snapshot-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .search-row {
+    flex-direction: column;
+  }
+
+  .run-btn {
+    width: 100%;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="hero">
+    <div class="logo">🛡️</div>
+
+    <h1>Squeeze<span>Guard</span> AI</h1>
+
+    <div class="tagline">
+      Detect the squeeze before the squeeze detects you.
+    </div>
+
+    <div class="powered">
+      POWERED BY BINANCE AGENT OS
+    </div>
+  </div>
+
+
+  <div class="card">
+
+    <label class="input-label">
+      BINANCE USDⓈ-M FUTURES SYMBOL
+    </label>
+
+    <div class="search-row">
+
+      <input
+        id="symbol"
+        value="BTCUSDT"
+        placeholder="BTCUSDT"
+      >
+
+      <button
+        class="run-btn"
+        onclick="runDemo()">
+        RUN SQUEEZEGUARD
+      </button>
+
+    </div>
+
+    <button
+      class="copy-btn"
+      onclick="copyPrompt()">
+      COPY BINANCE AGENT OS PROMPT
+    </button>
+
+    <div class="demo-note">
+      Web prototype currently demonstrates the SqueezeGuard scoring interface.
+      The full market-risk workflow uses Binance Agent OS for market-data retrieval.
+    </div>
+
+    <div id="status" class="status">
+      ✓ SqueezeGuard analysis loaded
+    </div>
+
+  </div>
+
+
+  <div id="results" class="hidden">
+
+    <div class="card">
+
+      <div class="section-title">
+        SQUEEZE RISK
+      </div>
+
+      <div class="score-grid">
+
+        <div class="score-card">
+
+          <div class="score-title">
+            SHORT SQUEEZE RISK
+          </div>
+
+          <div class="score-number">
+            48<span style="font-size:18px;color:#64748b">/100</span>
+          </div>
+
+          <div class="risk">
+            WATCH
+          </div>
+
+          <div class="progress">
+            <div id="shortBar"></div>
+          </div>
+
+        </div>
+
+
+        <div class="score-card">
+
+          <div class="score-title">
+            LONG SQUEEZE RISK
+          </div>
+
+          <div class="score-number">
+            46<span style="font-size:18px;color:#64748b">/100</span>
+          </div>
+
+          <div class="risk">
+            WATCH
+          </div>
+
+          <div class="progress">
+            <div id="longBar"></div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+
+    <div class="card">
+
+      <div class="section-title">
+        MARKET SNAPSHOT — DEMO DATA
+      </div>
+
+      <div class="snapshot-grid">
+
+        <div class="metric">
+          <div class="metric-name">SYMBOL</div>
+          <div class="metric-value" id="symbolOutput">
+            BTCUSDT
+          </div>
+        </div>
+
+        <div class="metric">
+          <div class="metric-name">PRICE</div>
+          <div class="metric-value">
+            $79,702.50
+          </div>
+        </div>
+
+        <div class="metric">
+          <div class="metric-name">24H CHANGE</div>
+          <div class="metric-value">
+            +0.992%
+          </div>
+        </div>
+
+        <div class="metric">
+          <div class="metric-name">FUNDING RATE</div>
+          <div class="metric-value">
+            +0.002095%
+          </div>
+        </div>
+
+        <div class="metric">
+          <div class="metric-name">OPEN INTEREST</div>
+          <div class="metric-value">
+            106,805 BTC
+          </div>
+        </div>
+
+        <div class="metric">
+          <div class="metric-name">TAKER FLOW</div>
+          <div class="metric-value">
+            BUY BIAS
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="card">
+
+      <div class="section-title">
+        SHORT SQUEEZE SCORE BREAKDOWN
+      </div>
+
+      <div class="breakdown-row">
+        <span>Price Momentum</span>
+        <span class="points">9/15</span>
+      </div>
+
+      <div class="breakdown-row">
+        <span>Open Interest</span>
+        <span class="points">4/20</span>
+      </div>
+
+      <div class="breakdown-row">
+        <span>Funding / Positioning</span>
+        <span class="points">5/15</span>
+      </div>
+
+      <div class="breakdown-row">
+        <span>Long / Short Crowding</span>
+        <span class="points">5/15</span>
+      </div>
+
+      <div class="breakdown-row">
+        <span>Taker Flow</span>
+        <span class="points">11/15</span>
+      </div>
+
+      <div class="breakdown-row">
+        <span>Order Book</span>
+        <span class="points">7/10</span>
+      </div>
+
+      <div class="breakdown-row">
+        <span>Market Structure</span>
+        <span class="points">7/10</span>
+      </div>
+
+    </div>
+
+
+    <div class="card">
+
+      <div class="section-title">
+        LONG SQUEEZE SCORE BREAKDOWN
+      </div>
+
+      <div class="breakdown-row">
+        <span>Price Momentum</span>
+        <span class="points">5/15</span>
+      </div>
+
+      <div class="breakdown-row">
+        <span>Open Interest</span>
+        <span class="points">7/20</span>
+      </div>
+
+      <div class="breakdown-row">
+        <span>Funding / Positioning</span>
+        <span class="points">10/15</span>
+      </div>
+
+      <div class="breakdown-row">
+        <span>Long / Short Crowding</span>
+        <span class="points">12/15</span>
+      </div>
+
+      <div class="breakdown-row">
+        <span>Taker Flow</span>
+        <span class="points">4/15</span>
+      </div>
+
+      <div class="breakdown-row">
+        <span>Order Book</span>
+        <span class="points">4/10</span>
+      </div>
+
+      <div class="breakdown-row">
+        <span>Market Structure</span>
+        <span class="points">4/10</span>
+      </div>
+
+    </div>
+
+
+    <div class="card">
+
+      <div class="section-title">
+        SUPPORTING EVIDENCE
+      </div>
+
+      <ul class="evidence">
+        <li>Short-term price momentum remains constructive.</li>
+        <li>Recent taker flow shows buyer dominance.</li>
+        <li>Top traders remain heavily positioned long.</li>
+        <li>Open interest is not expanding aggressively.</li>
+      </ul>
+
+    </div>
+
+
+    <div class="card">
+
+      <div class="section-title">
+        CRITICAL MARKET LEVELS
+      </div>
+
+      <div class="snapshot-grid">
+
+        <div class="metric">
+          <div class="metric-name">
+            UPSIDE TRIGGER
+          </div>
+
+          <div class="metric-value">
+            $79,850
+          </div>
+        </div>
+
+        <div class="metric">
+          <div class="metric-name">
+            DOWNSIDE TRIGGER
+          </div>
+
+          <div class="metric-value">
+            $79,500
+          </div>
+        </div>
+
+        <div class="metric">
+          <div class="metric-name">
+            MAJOR SUPPORT
+          </div>
+
+          <div class="metric-value">
+            $79,400
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="card verdict">
+
+      <div class="verdict-icon">
+        🛡️
+      </div>
+
+      <div class="section-title">
+        GUARD VERDICT
+      </div>
+
+      <h2>
+        NEUTRAL / COMPRESSION
+      </h2>
+
+      <p>
+        No high-confidence squeeze setup is currently demonstrated.
+        SqueezeGuard evaluates leverage, positioning, order flow and market
+        structure before issuing a high-risk warning.
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <div class="footer">
+
+    SqueezeGuard AI — Binance Agent OS Mini Hackathon 2026
+
+    <br>
+
+    SqueezeGuard scores are heuristic risk scores,
+    not probabilities or guaranteed market predictions.
+
+  </div>
+
+</div>
+
+
+<script>
+
+function runDemo() {
+
+  const symbol =
+    document
+      .getElementById("symbol")
+      .value
+      .trim()
+      .toUpperCase() || "BTCUSDT";
+
+  document
+    .getElementById("symbolOutput")
+    .innerText = symbol;
+
+  document
+    .getElementById("results")
+    .classList
+    .remove("hidden");
+
+  document
+    .getElementById("status")
+    .style
+    .display = "block";
+
+  setTimeout(() => {
+
+    document
+      .getElementById("shortBar")
+      .style
+      .width = "48%";
+
+    document
+      .getElementById("longBar")
+      .style
+      .width = "46%";
+
+  }, 150);
+
+}
+
+
+function copyPrompt() {
+
+  const symbol =
+    document
+      .getElementById("symbol")
+      .value
+      .trim()
+      .toUpperCase() || "BTCUSDT";
+
+
+  const prompt =
+`Using Binance Agent OS, run SqueezeGuard V2 on ${symbol} USDⓈ-M Futures using CURRENT market data.
+
+Retrieve:
+- Current price
+- 24H price change
+- Recent 5m candlesticks
+- Recent 15m candlesticks
+- Recent 1H candlesticks
+- Current funding rate
+- Current open interest
+- Open-interest trend
+- Long/short positioning
+- Top-trader positioning
+- Taker buy/sell volume
+- Futures order book
+- Data timestamps
+
+Calculate TWO independent risk scores:
+
+SHORT SQUEEZE RISK: 0-100
+LONG SQUEEZE RISK: 0-100
+
+Use this scoring model:
+
+Price Momentum: 15
+Open Interest: 20
+Funding / Positioning: 15
+Long / Short Crowding: 15
+Taker Flow: 15
+Order Book: 10
+Market Structure: 10
+
+Show the actual point breakdown for every category.
+
+Also return:
+- Market Snapshot
+- Supporting Evidence
+- Counter Evidence
+- Critical Market Levels
+- Guard Verdict
+
+The category points must add exactly to the final score.
+
+The scores are heuristic risk scores, NOT probabilities.
+
+Market-data only.
+Do not access balances.
+Do not place, modify or cancel any transaction.
+
+Clearly state that the source is Binance Agent OS.`;
+
+
+  navigator.clipboard.writeText(prompt)
+    .then(() => {
+
+      alert(
+        "SqueezeGuard Agent OS prompt copied!"
+      );
+
+    })
+    .catch(() => {
+
+      alert(
+        "Unable to copy automatically. Please copy the prompt manually."
+      );
+
+    });
+
+}
+
+</script>
+
+</body>
+</html>
